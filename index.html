@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="Content-Language" content="en-us" />
+        <link rel="stylesheet" type="text/css" href="index.css" />
+    </head>
+    <body>
+
+        <div class="events_monitor">
+            <h2>Events monitor:</h2> 
+            <dl>
+                <dt>dragstart</dt>
+                    <dd>...</dd>
+                <dt>drag</dt>
+                    <dd>...</dd>
+                <dt>dragenter</dt>
+                    <dd>...</dd>
+                <dt>dragover</dt>
+                    <dd>...</dd>
+                <dt>dragleave</dt>
+                    <dd>...</dd>
+                <dt>drop</dt>
+                    <dd>...</dd>
+                <dt>dragend</dt>
+                    <dd>...</dd>
+            </dl>
+        </div>
+
+        <div class="toys">
+
+            <h2>Toys to drag:</h2> 
+
+            <div class="draggable" id="drag1">Drag #1</div>
+
+            <div class="draggable" id="drag2">Drag #2</div>
+
+            <img id="drag3" width="64" height="64" alt="new firefox logo!"
+                src="http://people.mozilla.com/~faaborg/files/shiretoko/firefoxIcon/firefox-64.png" />
+
+            <form><textarea rows="3" cols="10">Select text and drag away!</textarea></form>
+
+        </div>
+
+        <div class="boxes">
+
+            <h2>Boxes for toys:</h2> 
+            
+            <div class="droparea" id="a">
+                <span>A</span>
+            </div>
+
+            <div class="droparea" id="b">
+                <span>B</span>
+            </div>
+
+            <div class="droparea" id="c">
+                <span>C</span>
+            </div>
+
+            <ul id="delegated">
+                <li id="d1">D1</li>
+                <li id="d2">D2</li>
+                <li id="d3">D3</li>
+            </li>
+        </div>
+
+        <!--<script type='text/javascript' src='http://hacks.mozilla.org/wp-includes/js/jquery/jquery.js?ver=1.2.6'></script>-->
+        <script type="text/javascript" src="jquery-1.3.2.js"></script>
+        <script type="text/javascript" src="index.js"></script>
+    </body>
+</html>
