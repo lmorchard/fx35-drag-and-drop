@@ -66,8 +66,8 @@ p.srclink {
 }
 .drophere {
     padding: 0.25em;
-    width: 128px;
-    height: 96px;
+    width: 15ex;
+    height: 15ex;
     border: 1px solid #666;
     background: #eee;
     margin: 0 0 0 15ex;
@@ -121,8 +121,55 @@ ul.droplist li.drophere {
 }
 
 #feedback_image .drophere {
-    margin: 0 0 0 20ex;
+    margin: 0 0 0 22ex;
 }
+
+#data_transfer .drophere {
+    width: 45ex;
+    height: 4em;
+    margin: 1em 0 0 22ex;
+}
+#data_transfer .content_html {
+    margin: 1em 0 0 22ex;
+}
+#data_transfer .content_html .content {
+    margin: 0.5em;
+    padding: 0.5em;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+#data_transfer .content_text {
+    margin: 1em 0 0 22ex;
+}
+#data_transfer .content_text .content {
+    margin: 0.5em;
+    padding: 0.5em;
+    font-family: monospace;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+#data_transfer .content_url {
+    margin: 1em 0 0 22ex;
+}
+#data_transfer .content_url .content {
+    margin: 0.5em;
+    padding: 0.5em;
+    font-family: monospace;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+
+#data_transfer .draglist li {
+    width: 17ex;
+    margin: 0.25em;
+    padding: 0.25em;
+}
+#data_transfer .dragme {
+    border: 1px solid #666;
+    background: #acf;
+    cursor: pointer;
+}
+
 .events_monitor {
     float: left;
     margin: 0.25em;

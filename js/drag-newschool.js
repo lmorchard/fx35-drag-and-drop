@@ -9,29 +9,39 @@
  */
 $(document).ready(function() {
 
-    // Set up the draggable element.
     $('#newschool .dragme')
+    
+        // Set the element as draggable.
         .attr('draggable', 'true')
+
+        // Handle the start of dragging to initialize.
         .bind('dragstart', function(ev) {
             var dt = ev.originalEvent.dataTransfer;
             dt.setData("Text", "Dropped in zone!");
             return true;
+        })
+
+        // Handle the end of dragging.
+        .bind('dragend', function(ev) {
+            $.log('#newschool .messages', 'Drag ended');
+            return false;
         });
 
-    // Set up the drop zone.
     $('#newschool .drophere')
 
-        // Update the drop zone class on drag enter/leave
+        // Highlight on drag entering drop zone.
         .bind('dragenter', function(ev) {
             $(ev.target).addClass('dragover');
             return false;
         })
+
+        // Un-highlight on drag leaving drop zone.
         .bind('dragleave', function(ev) {
             $(ev.target).removeClass('dragover');
             return false;
         })
 
-        // Allow drops of any kind into the zone.
+        // Decide whether the thing dragged in is welcome.
         .bind('dragover', function(ev) {
             return false;
         })
@@ -39,8 +49,8 @@ $(document).ready(function() {
         // Handle the final drop...
         .bind('drop', function(ev) {
             var dt = ev.originalEvent.dataTransfer;
+            console.log(dt);
             $.log('#newschool .messages', dt.getData("Text"));
-            ev.stopPropagation();
             return false;
         });
 

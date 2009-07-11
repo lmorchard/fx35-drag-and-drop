@@ -85,7 +85,7 @@
             </div>
 
             <div id="feedback_image">
-                <h2>Drag feedback images</h2>
+                <h2>Using drag feedback images</h2>
                 <div class="demo">
                     <ul class="drag_delegates draglist">
                         <li class="dragme" id="imgdrag0" draggable="true">Drag 0</li>
@@ -99,6 +99,60 @@
                 <script type="text/javascript" src="js/drag-feedback-images.js"></script>
             </div>
 
+            <div id="data_transfer">
+                <h2>Dragging and dropping a variety of data types</h2>
+                <div class="demo">
+                    <ul class="drag_delegates draglist">
+                        <li class="dragme" id="datadrag0" draggable="true">Text</li>
+                        <li class="dragme" id="datadrag1" draggable="true">Text / HTML / URI</li>
+                        <li class="dragme" id="datadrag2" draggable="true">Disallowed</li>
+                        <li><p>
+                            ...and try dragging to other windows and applications.
+                        </p></li>
+                    </ul>
+                    <div class="drophere" id="datadrop">
+                        Drop here from items on the left—and selected
+                        content from other windows and applications.
+                    </div>
+                    <div class="content_url">
+                        URL content appears here:
+                        <div class="content"></div>
+                    </div>
+                    <div class="content_text">
+                        Text content appears here:
+                        <div class="content"></div>
+                    </div>
+                    <div class="content_html">
+                        HTML content appears here:
+                        <div class="content"></div>
+                    </div>
+                    <ul class="messages"></ul>
+                </div>
+                <script type="text/javascript" src="js/drag-datatransfer.js"></script>
+
+            </div>
+
+            <div id="drag_effects">
+                <h2>Using drag effects</h2>
+                <div class="demo">
+                    <ul class="drag_delegates draglist">
+                        <li class="dragme" id="effectdrag0" draggable="true">Drag 0 (copy)</li>
+                        <li class="dragme" id="effectdrag1" draggable="true">Drag 1 (move)</li>
+                        <li class="dragme" id="effectdrag2" draggable="true">Drag 2 (link)</li>
+                        <li class="dragme" id="effectdrag3" draggable="true">Drag 3 (all)</li>
+                        <li class="dragme" id="effectdrag4" draggable="true">Drag 4 (none)</li>
+                    </ul>
+                    <ul class="drop_delegates droplist">
+                        <li class="drophere" id="effectdrop0">Drop 0 (copy)</li>
+                        <li class="drophere" id="effectdrop1">Drop 1 (move)</li>
+                        <li class="drophere" id="effectdrop2">Drop 2 (link)</li>
+                        <li class="drophere" id="effectdrop3">Drop 3 (all)</li>
+                        <li class="drophere" id="effectdrop4">Drop 4 (none)</li>
+                    </ul>
+                    <ul class="messages"></ul>
+                </div>
+                <script type="text/javascript" src="js/drag-effects.js"></script>
+            </div>
             <!--
 
             <div class="events_monitor">

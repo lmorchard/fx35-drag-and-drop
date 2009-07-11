@@ -26,6 +26,7 @@ $(document).ready(function() {
             $('#oldschool .dragover').each(function() {
                 $.log('#oldschool .messages', "Dropped in zone!");
             });
+            $.log('#oldschool .messages', "Drag ended");
             return false;
         })
 
