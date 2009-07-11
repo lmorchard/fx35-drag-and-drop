@@ -5,13 +5,22 @@ var Main = function($) {
 
     var $this = { 
 
-        /**
-         *
-         */
         init: function () {
-            this.initDragging();
+            this.initOldSchool();
+            this.initNewSchool();
+            //this.initDragging();
 
             return this;
+        },
+        
+        initOldSchool: function() {
+
+
+        },
+
+        initNewSchool: function() {
+
+
         },
 
         initDragging: function() {
@@ -47,7 +56,9 @@ var Main = function($) {
                     dt.effectAllowed = 'move';
                     dt.dropEffect = 'move';
                     dt.setData("Text", ev.target.getAttribute('id'));
+                    dt.setDragImage(ev.target,0,0);
 
+                    /*
                     var canvas = document.createElement("canvas");
                     canvas.width = canvas.height = 50;
 
@@ -60,7 +71,7 @@ var Main = function($) {
                     ctx.stroke();
 
                     dt.setDragImage(canvas, 25, 25);
-
+                    */
                     return true;
                 })
 
@@ -161,60 +172,6 @@ var Main = function($) {
             var dt = ev.originalEvent.dataTransfer;
             var idelt = dt.getData("Text");
             return true;
-        },
-
-        dragLeave: function(ev) {
-            // console.log('dragLeave ' + ev.target.id);
-            var dt = ev.originalEvent.dataTransfer;
-            var idelt = dt.getData("Text");
-            return true;
-        },
-
-        drag: function(ev) {
-            // console.log('drag ' + ev.target.id);
-            // console.log(ev);
-        },
-
-        drop: function(ev) {
-            console.log('drop ' + ev.target.id);
-            // console.log(ev);
-
-            var off = $(ev.target).offset();
-            var x = ev.pageX - off.left;
-            var y = ev.pageY - off.top;
-
-            console.log({x:x, y:y});
-
-            var dt = ev.originalEvent.dataTransfer;
-            
-            // console.log(dt);
-            // console.log(ev);
-            // console.log(dt.types);
-            // console.log(dt.getData(dt.types[0]));
-            //// console.log(dt.getData('text/html'));
-
-            var idelt = dt.getData("Text");
-            if (idelt) {
-                $('#'+idelt).appendTo(ev.target);
-            }
-
-            ev.stopPropagation();
-            return false;
-        },
-
-        dragOver: function(ev) {
-            // console.log('dragover ' + ev.target.id);
-
-            var dt = ev.originalEvent.dataTransfer;
-            return false;
-            var idelt = dt.getData("Text");
-            var id = ev.target.getAttribute('id');
-            if( (id =='boxB' || id =='boxA') && (idelt == 'drag' || idelt=='drag2'))
-                return false;
-            else if( id =='boxC' && idelt == 'drag3')
-                return false;
-            else
-                return true;
         },
 
         EOF:null
