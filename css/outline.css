@@ -14,29 +14,31 @@ h1 {
     border-bottom: 3px solid #333;
 }
 ul.outline li {
-    /*
-    margin-top: 0.5em;
-    */
 }
 ul.outline li>ul {
 }
 ul.outline li>div {
     padding: 0.5em;
-    border-top: 2px solid transparent;
-    border-bottom: 2px solid transparent;
+}
+ul.outline li.dragging {
 }
 ul.outline .hover {
-    background: #afa;
 }
-ul.outline .land_above>div {
-    border-top: 2px solid #333;
+ul.outline .land_above, 
+ul.outline .land_below, 
+ul.outline .land_above_child, 
+ul.outline .land_below_child {
+    background: transparent url(../img/insert.png) no-repeat;
 }
-ul.outline .land_below>div {
-    border-bottom: 2px solid #333;
+ul.outline .land_above {
+    background-position: left top;
 }
-ul.outline .land_sibling>div:before {
-    content: 'v';
+ul.outline .land_below {
+    background-position: left bottom;
 }
-ul.outline .land_child>div:before {
-    content: '\\';
+ul.outline .land_above_child {
+    background-position: 3em top;
+}
+ul.outline .land_below_child {
+    background-position: 3em bottom;
 }

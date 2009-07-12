@@ -1,9 +1,12 @@
 /**
  * Outline editing with HTML5 Drag & Drop
+ *
+ * @TODO: Try getting other media types to drop in 
  */
 $(document).ready(function() {
 
     $.fn.tagName = function() {
+        if (!this.get(0)) return;
         return this.get(0).tagName.toLowerCase();
     };
 
@@ -18,78 +21,61 @@ $(document).ready(function() {
     $.fn.outliner.support.prototype = {
 
         init: function(root) {
-            var $this = this;
+            this.last_id = 1;
+            this.root    = root;
+            this.dragged = false;
 
-            $this.root = root;
-            $this.root
-                .find('li').attr('draggable', 'true').end()
-                .data('last_id', 1);
-
-            $this.wireUpEvents();
+            this.wireUpEvents();
         },
 
         wireUpEvents: function() {
             var $this = this;
-            $.each([
-                'dragstart', 'drag', 'dragend', 'dragenter', 'dragover',
-                'dragleave', 'drop'
-            ], function() {
-                var ev_name = this;
-                if ('undefined' != typeof $this[ev_name])
-                    $this.root.bind(ev_name, function(ev) { 
-                        return $this[ev_name](ev);
-                    })
-            })
-        },
+            this.root
+                .find('li').attr('draggable', 'true').end()
 
-        dragstart: function(ev) {
-            var $this = this;
-            if ('li' != $(ev.target).tagName()) return true;
+                .bind('dragstart', function(ev) {
+                    $this.dragged = ev.target;
+                    $(ev.target).addClass('dragging');
+                    var dt = ev.originalEvent.dataTransfer;
+                    dt.setData('x-outliner', 'true');
+                    
+                    return true;
+                })
+                
+                .bind('dragend', function(ev) {
+                    $(ev.target).removeClass('dragging');
+                    $this.clearDropFeedback();
+                    return false;
+                })
 
-            var dt = ev.originalEvent.dataTransfer;
-            dt.setData('text/plain', $this.getElementId(ev.target));
+                .bind('dragenter', function(ev) {
+                    $this.updateDropFeedback(ev);
+                    return false;
+                })
 
-            return true;
-        },
+                .bind('dragover', function(ev) {
+                    var drop = $this.determineDrop(ev);
+                    if (!drop.allowed) return true;
+                    return false;
+                })
 
-        dragend: function(ev) {
-            this.clearDropFeedback();
-            return false;
-        },
-
-        dragover: function(ev) {
-            this.clearDropFeedback();
-
-            var drop = this.determineDrop(ev, $(ev.target));
-            if (!drop.allowed) return true;
-            
-            this.updateDropFeedback(ev);
-            return false;
-        },
-
-        drop: function(ev) {
-            var $this = this;
-            return $this.performDrop(ev);
-            return false;
+                .bind('drop', function(ev) {
+                    $this.performDrop(ev);
+                    $this.dragged = null;
+                    $this.clearDropFeedback();
+                    return false;
+                });
         },
 
         getElementId: function(el) {
-            var $this = this;
-            if (!el.id) {
-                var last_id = $this.root.data('last_id');
-                $this.root.data('last_id', ++last_id);
-                el.id = 'i' + last_id;
-            }
+            if (!el.id) el.id = 'item-' + (++this.last_id);
             return el.id;
         },
 
         determineDrop: function(ev, target) {
-            var $this = this;
-
+            if (!target) target = $(ev.target);
             if ('div' != target.tagName())
                 target.find('div:first');
-
-            var node = $this.getDropNode(ev);
 
             var t_pos = target.position();
             
@@ -97,49 +83,64 @@ $(document).ready(function() {
                 land_above: ev.pageY < t_pos.top + (target.height()/2),
                 land_child: ev.pageX > t_pos.left + 100,
                 allowed:
-                    ( target[0] != node ) &&
-                    ( $.inArray(node, target.parents()) == -1 )
+                    ( target[0] != this.dragged ) &&
+                    ( $.inArray(this.dragged, target.parents()) == -1 )
             };
 
             return drop;
         },
 
         getDropNode: function(ev) {
-            var dt = ev.originalEvent.dataTransfer;
-            var el_id = dt.getData('text/plain');
-            return document.getElementById(el_id);
+            var node = null;
+            if (this.dragged) {
+                
+                node = $(this.dragged);
+                while (node.tagName() != 'li') {
+                    node = node.parent();
+                }
+
+            } else {
+
+                node = $(document.createElement('li'));
+                node.attr('draggable', 'true');
+
+                var dt = ev.originalEvent.dataTransfer;
+                var content = dt.getData('text/html');
+                if (!content) content = dt.getData('text/plain');
+                
+                node.append('<div>'+content+'</div>');
+                
+                this.dragged = node;
+
+            }
+            return node;
         },
 
         clearDropFeedback: function() {
-            $('.hover').removeClass('hover');
             $('.land_above').removeClass('land_above');
             $('.land_below').removeClass('land_below');
-            $('.land_sibling').removeClass('land_sibling');
-            $('.land_child').removeClass('land_child');
+            $('.land_above_child').removeClass('land_above_child');
+            $('.land_below_child').removeClass('land_below_child');
         },
 
         updateDropFeedback: function(ev) {
-            var target = $(ev.target),
-                drop   = this.determineDrop(ev, target);
-
+            var target = $(ev.target);
             if ('li'!=target.tagName())
                 target = target.parents('li:first');
 
-            if ( drop.land_above ) {
-                target.addClass('land_above');
-            } else {
-                target.addClass('land_below');
-            }
+            this.clearDropFeedback();
 
-            if ( drop.land_child ) {
-                target.addClass('land_child');
-            }
+            var drop = this.determineDrop(ev, target);
+            if (!drop.allowed) return true;
+
+            var class_name = 'land' +
+                ((drop.land_above) ? '_above' : '_below') +
+                ((drop.land_child) ? '_child' : '');
+            target.addClass(class_name);
         },
 
         performDrop: function(ev) {
-            var node   = this.getDropNode(ev),
-                target = $(ev.target),
-                node   = $(node);
+            var target = $(ev.target);
 
             if ('li' != target.tagName())
                 target = target.parent('li');
@@ -147,23 +148,32 @@ $(document).ready(function() {
             var drop = this.determineDrop(ev, target);
             if (!drop.allowed) return true;
 
+            var node = this.getDropNode(ev);
             node.remove();
             if (drop.land_above) {
-                node.insertBefore(target);
-            } else {
-                if (!drop.land_child) {
-                    node.insertAfter(target);
+                if (drop.land_child) {
+                    node.appendTo(this.getTargetUL(target.prev('li:last')));
                 } else {
-                    var ul = target.find('ul');
-                    if (!ul.length) {
-                        target.append('<ul></ul>');
-                        ul = target.find('ul');
-                    }
-                    node.prependTo(ul);
+                    node.insertBefore(target);
+                }
+            } else {
+                if (drop.land_child) {
+                    node.prependTo(this.getTargetUL(target));
+                } else {
+                    node.insertAfter(target);
                 }
             }
 
             return false;
+        },
+
+        getTargetUL: function(target) {
+            var ul = target.find('ul:first');
+            if (!ul.length) {
+                target.append('<ul></ul>');
+                ul = target.find('ul:first');
+            }
+            return ul;
         },
 
         EOF:null
