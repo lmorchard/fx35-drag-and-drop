@@ -1,0 +1,42 @@
+body {
+   font-family: sans-serif;
+   font-size: 95%;
+   margin: 1em 1.5em;
+}
+#content {
+}
+.template {
+    display: none;
+}
+p, h2 {
+}
+h1 {
+    border-bottom: 3px solid #333;
+}
+ul.outline li {
+    /*
+    margin-top: 0.5em;
+    */
+}
+ul.outline li>ul {
+}
+ul.outline li>div {
+    padding: 0.5em;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+}
+ul.outline .hover {
+    background: #afa;
+}
+ul.outline .land_above>div {
+    border-top: 2px solid #333;
+}
+ul.outline .land_below>div {
+    border-bottom: 2px solid #333;
+}
+ul.outline .land_sibling>div:before {
+    content: 'v';
+}
+ul.outline .land_child>div:before {
+    content: '\\';
+}
