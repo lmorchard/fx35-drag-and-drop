@@ -1,0 +1,226 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        <title>Drag and Drop in Firefox 3.5</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="Content-Language" content="en-us" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <script type="text/javascript" src="js/jquery-1.3.2.js"></script>
+        <script type="text/javascript" src="js/jquery-ui-1.7.2.custom.min.js"></script>
+        <script type="text/javascript" src="js/global.js"></script>
+    </head>
+    <body>
+        <div id="content">
+
+            <div id="toc">
+                <h1>
+                    Drag and Drop in 
+                    <img id="logo" src="img/firefox-64.png" width="32" height="32" /> 
+                    Firefox 3.5
+                </h1>
+                <p>
+                    by l.m.orchard
+                    &lt;<a href="mailto:lorchard@mozilla.com">lorchard@mozilla.com</a>&gt;
+                    <a href="http://decafbad.com">0xDECAFBAD</a>
+                </p>
+
+                <p>
+                    This page offers a variety of demonstrations and experiments
+                    using <a href="http://jquery.com/">jQuery</a> and 
+                    <a href="https://developer.mozilla.org/En/DragDrop/Drag_and_Drop">the new Drag &amp; Drop API</a> 
+                    offered by Firefox 3.5.
+                </p>
+
+                <ul class="sections">
+                    <li class="template"><a href="#">...</a></li>
+                </ul>
+
+                <p>
+                    Also check out this <a href="outline.html">outline drag-and-drop demo</a>,
+                    which combines most of the features demonstrated below.
+                </p>
+
+            </div>
+
+            <div id="oldschool">
+                <h2>Old school drag and drop</h2>
+
+                <p>
+                    This first demo isn't anything new at all—in fact, it's a really 
+                    cruddy implementation of drag &amp; drop using pre-3.5 mouse 
+                    events.
+                </p>
+
+                <div class="demo">
+                    <div class="dragme" id="dragme">Drag me!</div>
+                    <div class="drophere">Drop here!</div>
+                    <ul class="messages"></ul>
+                </div>
+
+                <script type="text/javascript" src="js/drag-oldschool.js"></script>
+            </div>
+
+            <div id="newschool">
+                <h2>New school drag and drop</h2>
+                <div class="demo">
+                    <div class="dragme">Drag me!</div>
+                    <div class="drophere">Drop here!</div>
+                    <ul class="messages"></ul>
+                </div>
+                <script type="text/javascript" src="js/drag-newschool.js"></script>
+            </div>
+
+            <div id="delegated">
+                <h2>New school drag and drop, now with Event Delegation!</h2>
+                <div class="demo">
+                    <ul class="drag_delegates draglist">
+                        <li class="dragme" id="drag0" draggable="true">Drag 0</li>
+                        <li class="dragme" id="drag1" draggable="true">Drag 1</li>
+                        <li class="dragme" id="drag2" draggable="true">Drag 2</li>
+                        <li><a href="#" class="spawn">+ Add another</a></li>
+                    </ul>
+                    <ul class="drop_delegates droplist">
+                        <li class="drophere" id="drop0">Drop 0</li>
+                        <li class="drophere" id="drop1">Drop 1</li>
+                        <li class="drophere" id="drop2">Drop 2</li>
+                        <li><a href="#" class="spawn">+ Add another</a></li>
+                    </ul>
+                    <ul class="messages"></ul>
+                </div>
+                <script type="text/javascript" src="js/drag-delegated.js"></script>
+            </div>
+
+            <div id="feedback_image">
+                <h2>Using drag feedback images</h2>
+                <div class="demo">
+                    <ul class="drag_delegates draglist">
+                        <li class="dragme" id="imgdrag0" draggable="true">Drag 0</li>
+                        <li class="dragme" id="imgdrag1" draggable="true">Drag 1</li>
+                        <li class="dragme" id="imgdrag2" draggable="true">Drag 2</li>
+                        <li class="dragme" id="imgdrag3" draggable="true">Drag 3</li>
+                    </ul>
+                    <div class="drophere" id="imgdrop">Drop here!</div>
+                    <ul class="messages"></ul>
+                </div>
+                <script type="text/javascript" src="js/drag-feedback-images.js"></script>
+            </div>
+
+            <div id="data_transfer">
+                <h2>Using data transfer content types</h2>
+                <div class="demo">
+                    <ul class="drag_delegates draglist">
+                        <li class="dragme" id="datadrag0" draggable="true">Text</li>
+                        <li class="dragme" id="datadrag1" draggable="true">Text / HTML / URI</li>
+                        <li class="dragme" id="datadrag2" draggable="true">Disallowed</li>
+                        <li><p>
+                            ...and try dragging to other windows and applications.
+                        </p></li>
+                    </ul>
+                    <div class="drophere" id="datadrop">
+                        Drop here from items on the left—and selected
+                        content from other windows and applications.
+                    </div>
+                    <div class="content_url">
+                        URL content appears here:
+                        <div class="content"></div>
+                    </div>
+                    <div class="content_text">
+                        Text content appears here:
+                        <div class="content"></div>
+                    </div>
+                    <div class="content_html">
+                        HTML content appears here:
+                        <div class="content"></div>
+                    </div>
+                    <ul class="messages"></ul>
+                </div>
+                <script type="text/javascript" src="js/drag-datatransfer.js"></script>
+
+            </div>
+
+            <div id="drag_effects">
+                <h2>Using drag effects</h2>
+                <div class="demo">
+                    <ul class="drag_delegates draglist">
+                        <li class="dragme" id="effectdrag0" draggable="true">Drag 0 (copy)</li>
+                        <li class="dragme" id="effectdrag1" draggable="true">Drag 1 (move)</li>
+                        <li class="dragme" id="effectdrag2" draggable="true">Drag 2 (link)</li>
+                        <li class="dragme" id="effectdrag3" draggable="true">Drag 3 (all)</li>
+                        <li class="dragme" id="effectdrag4" draggable="true">Drag 4 (none)</li>
+                    </ul>
+                    <ul class="drop_delegates droplist">
+                        <li class="drophere" id="effectdrop0">Drop 0 (copy)</li>
+                        <li class="drophere" id="effectdrop1">Drop 1 (move)</li>
+                        <li class="drophere" id="effectdrop2">Drop 2 (link)</li>
+                        <li class="drophere" id="effectdrop3">Drop 3 (all)</li>
+                        <li class="drophere" id="effectdrop4">Drop 4 (none)</li>
+                    </ul>
+                    <ul class="messages"></ul>
+                </div>
+                <script type="text/javascript" src="js/drag-effects.js"></script>
+            </div>
+            <!--
+
+            <div class="events_monitor">
+                <h3>Events monitor:</h3> 
+                <dl>
+                    <dt>dragstart</dt>
+                        <dd>...</dd>
+                    <dt>drag</dt>
+                        <dd>...</dd>
+                    <dt>dragenter</dt>
+                        <dd>...</dd>
+                    <dt>dragover</dt>
+                        <dd>...</dd>
+                    <dt>dragleave</dt>
+                        <dd>...</dd>
+                    <dt>drop</dt>
+                        <dd>...</dd>
+                    <dt>dragend</dt>
+                        <dd>...</dd>
+                </dl>
+            </div>
+
+            <div class="toys">
+
+                <h3>Toys to drag:</h3> 
+
+                <div class="draggable" id="drag1">Drag #1</div>
+
+                <div class="draggable" id="drag2">Drag #2</div>
+
+                <img id="drag3" width="64" height="64" alt="new firefox logo!"
+                    src="http://people.mozilla.com/~faaborg/files/shiretoko/firefoxIcon/firefox-64.png" />
+
+                <form><textarea rows="3" cols="10">Select text and drag away!</textarea></form>
+
+            </div>
+
+            <div class="boxes">
+
+                <h3>Boxes for toys:</h3> 
+                
+                <div class="droparea" id="a">
+                    <span>A</span>
+                </div>
+
+                <div class="droparea" id="b">
+                    <span>B</span>
+                </div>
+
+                <div class="droparea" id="c">
+                    <span>C</span>
+                </div>
+
+                <ul id="delegated">
+                    <li id="d1">D1</li>
+                    <li id="d2">D2</li>
+                    <li id="d3">D3</li>
+                </li>
+            </div>
+            -->
+
+        </div>
+    </body>
+</html>

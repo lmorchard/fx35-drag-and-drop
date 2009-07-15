@@ -27,7 +27,19 @@ $(document).ready(function() {
         // Update the drop zone class on drag enter/leave
         .bind('dragenter', function(ev) {
             if (!$(ev.target).hasClass('drophere')) return true;
-            
+            $(ev.target).addClass('dragover');
+            return false;
+        })
+        .bind('dragleave', function(ev) {
+            if (!$(ev.target).hasClass('drophere')) return true;
+            $(ev.target).removeClass('dragover');
+            return false;
+        })
+
+        // Allow only drops of the appropriate kind here
+        .bind('dragover', function(ev) {
+            if (!$(ev.target).hasClass('drophere')) return true;
+
             var dt = ev.originalEvent.dataTransfer;
             switch (ev.target.id) {
                 case 'effectdrop0': dt.dropEffect = 'copy'; break;
@@ -36,20 +48,6 @@ $(document).ready(function() {
                 case 'effectdrop3': dt.dropEffect = 'all'; break;
                 case 'effectdrop4': dt.dropEffect = 'none'; break;
             }
-
-            $(ev.target).addClass('dragover');
-            return false;
-        })
-        .bind('dragleave', function(ev) {
-            if (!$(ev.target).hasClass('drophere')) return true;
-
-            $(ev.target).removeClass('dragover');
-            return false;
-        })
-
-        // Allow drops of any kind into the zone.
-        .bind('dragover', function(ev) {
-            if (!$(ev.target).hasClass('drophere')) return true;
 
             return false;
         })
