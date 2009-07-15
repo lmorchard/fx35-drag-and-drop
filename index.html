@@ -69,7 +69,7 @@
                 built <a target="_new" target="_new" target="_new" href="http://decafbad.com/2009/07/drag-and-drop/outline.html">the beginnings of an outline editor</a>,
                 where every draggable element is also a drop target—of which
                 there could be dozens to hundreds in a complex document, something
-                that gave me some minor hair-tearing moments at times in the past
+                that gave me some minor hair-tearing moments in the past
                 while trying to make do with plain old mouse events.
             </p><p>
                 And, all the above can be downloaded or cloned from 
@@ -284,31 +284,155 @@
                 appropriate content types extracted from the external object.
             </p><p>
                 Thus, you could select some text in a word processor window and
-                drop it into one of your elements, and expect to find it as 
-                <code>text/plain</code> content—assuming your word processor
-                plays nicely, which most do.  
+                drop it into one of your elements, and at least expect to find
+                it available as <code>text/plain</code> content.  
             </p><p>
                 You can also select content in 
                 another browser window, and expect to see <code>text/html</code>
                 appear in your events.  Check out the 
                 <a target="_new" href="http://decafbad.com/2009/07/drag-and-drop/outline.html">outline editing demo</a>
-                and see what happens when you try dragging various elements and
-                selected content from other windows onto the items there.
-
+                and see what happens when you try dragging various elements 
+                (eg. images, tables, and lists) and highlighted content from
+                other windows onto the items there.
             </p>
         </div>
 
         <div id="dragfeedback">
             <h2>Using Drag Feedback Images</h2>
             <p>
-                <a target="_new" href="http://decafbad.com/2009/07/drag-and-drop/api-demos.html#feedback_image">the live demo</a>
-                <a target="_new" href="http://decafbad.com/2009/07/drag-and-drop/js/drag-feedback-images.js">associated JS code</a>
+               An important aspect of the drag and drop interaction is a
+               representation of the thing being dragged.  By default in
+               Firefox, this is a "ghost" image of the dragged element itself.  But,
+               the <code>dataTransfer</code> property of the original Event
+               object exposes the method <code>setDragImage()</code> for use
+               in customizing this representation.
+            </p><p>
+                There's
+                <a target="_new" href="http://decafbad.com/2009/07/drag-and-drop/api-demos.html#feedback_image">a live demo</a> of this feature, as well as
+                <a target="_new" href="http://decafbad.com/2009/07/drag-and-drop/js/drag-feedback-images.js">associated JS code</a> 
+                available.  The gist, however, is sketched out in these code snippets:
+            </p>
+            <pre lang="javascript">
+    var dt = ev.originalEvent.dataTransfer;    
+
+    dt.setDragImage( $('#feedback_image h2')[0], 0, 0);
+
+    dt.setDragImage( $('#logo')[0], 32, 32); 
+
+    var canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 50;
+
+    var ctx = canvas.getContext("2d");
+    ctx.lineWidth = 8;
+    ctx.moveTo(25,0);
+    ctx.lineTo(50, 50);
+    ctx.lineTo(0, 50);
+    ctx.lineTo(25, 0);
+    ctx.stroke();
+
+    dt.setDragImage(canvas, 25, 25);
+            </pre>
+            <p>
+                You can supply a DOM node as the first parameter to 
+                <code>setDragImage()</code>, which includes everything from
+                text to images to <code>&lt;canvas&gt;</code> elements.  The
+                second two parameters indicate at what left and top offset
+                the mouse should appear in the image while dragging.
+            </p><p>
+                For example, since the <code>#logo</code> image is 64x64,
+                the parameters in the second <code>setDragImage()</code>
+                method places the mouse right in the center of the image.
+                On the other hand, the first call positions the feedback
+                image such that the mouse rests in the upper left corner.
             </p><p>
             </p>
         </div>
 
         <div id="dragfeedback">
             <h2>Using Drop Effects</h2>
+            <p>
+                As mentioned at the start of this article, the drag and drop
+                interaction has been used to support actions such as copying,
+                moving, and linking.  Accordingly, the HTML 5 specification 
+                accomodates these operations in the form of the 
+                <code>effectAllowed</code> and <code>dropEffect</code>
+                properties exposed by the Event object.
+            </p>
+            <p>
+                For a quick fix, check out the
+                <a target="_new" href="http://decafbad.com/2009/07/drag-and-drop/api-demos.html#drag_effects">a live demo</a> 
+                of this feature, as well as the
+                <a target="_new" href="http://decafbad.com/2009/07/drag-and-drop/js/drag-effects.js">associated JS code</a>.
+            </p><p>
+                The basic idea is that the <code>dragstart</code> event
+                listener can set a value for <code>effectAllowed</code> like so:
+            </p>
+            <pre lang="javascript">
+    var dt = ev.originalEvent.dataTransfer;
+    switch (ev.target.id) {
+        case 'effectdrag0': dt.effectAllowed = 'copy'; break;
+        case 'effectdrag1': dt.effectAllowed = 'move'; break;
+        case 'effectdrag2': dt.effectAllowed = 'link'; break;
+        case 'effectdrag3': dt.effectAllowed = 'all'; break;
+        case 'effectdrag4': dt.effectAllowed = 'none'; break;
+    }
+            </pre>
+            <p>The choices available for this property include the following:</p>
+            <dl> 
+                <dt><code>none</code></dt><dd>no operation is permitted </dd>
+                <dt><code>copy</code></dt><dd>copy only </dd>
+                <dt><code>move</code></dt><dd>move only </dd>
+                <dt><code>link</code></dt><dd>link only </dd>
+                <dt><code>copyMove</code></dt><dd>copy or move only </dd>
+                <dt><code>copyLink</code></dt><dd>copy or link only </dd>
+                <dt><code>linkMove</code></dt><dd>link or move only </dd>
+                <dt><code>all</code></dt><dd>copy, move, or link </dd>
+            </dl>
+            <p>
+                On the other end, the <code>dragover</code> event listener 
+                can set the value of the
+                <code>dropEffect</code> property to indicate the expected effect
+                invoked on a successful drop.  If the value does
+                not match up with <code>effectAllowed</code>, the drop will
+                be considered cancelled on completion.
+            </p><p>
+                In the 
+                <a target="_new" href="http://decafbad.com/2009/07/drag-and-drop/api-demos.html#drag_effects">a live demo</a>,
+                you should be able to see that only elements with matching
+                effects can be dropped into the appropriate drop zones.  This
+                is accomplished with code like the follwoing:
+            </p>
+            <pre lang="javascript">
+    var dt = ev.originalEvent.dataTransfer;
+    switch (ev.target.id) {
+        case 'effectdrop0': dt.dropEffect = 'copy'; break;
+        case 'effectdrop1': dt.dropEffect = 'move'; break;
+        case 'effectdrop2': dt.dropEffect = 'link'; break;
+        case 'effectdrop3': dt.dropEffect = 'all'; break;
+        case 'effectdrop4': dt.dropEffect = 'none'; break;
+    }
+            </pre>
+            <p>
+                Although the OS itself can provide some feedback, you 
+                can also use these properties to update your own visible 
+                feedback, both on the dragged element and on the drop zone
+                itself.
+            </p>
+
+        </div>
+
+        <div id="conclusion">
+            <h2>Conclusion</h2>
+            <p>
+                The new first-class drag and drop events in HTML5 and Firefox
+                make supporting this form of UI interaction simple, concise,
+                and powerful in the browser.  But beyond the new simplicity of
+                these events, the ability to transfer content between
+                applications opens brand new avenues for web-based applications
+                and collaboration with desktop software in general.
+            </p><p>
+            </p><p>
+            </p>
         </div>
 
     </body>
