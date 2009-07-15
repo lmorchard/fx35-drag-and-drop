@@ -22,7 +22,7 @@
             <p>
                 by l.m.orchard
                 &lt;<a href="mailto:lorchard@mozilla.com">lorchard@mozilla.com</a>&gt;
-                <a href="http://decafbad.com">0xDECAFBAD</a>
+                <a target="_new" target="_new" target="_new" href="http://decafbad.com">0xDECAFBAD</a>
             </p>
             <ul class="sections">
                 <li class="template"><a href="#">...</a></li>
@@ -59,25 +59,32 @@
                 drop, and maybe even extended it beyond the window sandbox?
             </p><p>
                 As it turns out, this very wish is answered by the HTML 5 specification 
-                <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#dnd">section on new drag-and-drop events</a>, and 
-                <a href="https://developer.mozilla.org/En/DragDrop/Drag_and_Drop">Firefox 3.5 includes an implementation</a> of those events.
+                <a target="_new" href="http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#dnd">section on new drag-and-drop events</a>, and 
+                <a target="_new" href="https://developer.mozilla.org/En/DragDrop/Drag_and_Drop">Firefox 3.5 includes an implementation</a> of those events.
             </p><p>
                 If you want to jump straight to the code, I've put together 
-                <a href="http://decafbad.com/2009/07/drag-and-drop/api-demos.html">some simple demos</a> 
+                <a target="_new" target="_new" target="_new" href="http://decafbad.com/2009/07/drag-and-drop/api-demos.html">some simple demos</a> 
                 of the new events.  
             </p><p>
                 I've even scratched an itch of my own and
-                built <a href="http://decafbad.com/2009/07/drag-and-drop/outline.html">the beginnings of an outline editor</a>,
+                built <a target="_new" target="_new" target="_new" href="http://decafbad.com/2009/07/drag-and-drop/outline.html">the beginnings of an outline editor</a>,
                 where every draggable element is also a drop target—of which
                 there could be dozens to hundreds in a complex document, something
                 that gave me some minor hair-tearing moments at times in the past
                 while trying to make do with plain old mouse events.
+            </p><p>
+                And, all the above can be downloaded or cloned from 
+                <a href="http://github.com/lmorchard/fx35-drag-and-drop">a GitHub repository</a>
+                I've created expecially for this article.
             </p>
         </div>
 
         <div id="events">
             <h2>The New Drag and Drop Events</h2>
-            <p>So, with no further ado, here are the new drag and drop events:</p>
+            <p>
+                So, with no further ado, here are the new drag and drop events,
+                in roughly the order you might expect to see them fired:
+            </p>
             <dl>
                 <dt><code>dragstart</code></dt>
                 <dd>
@@ -119,12 +126,12 @@
                 </dd>
             </dl>
             <p>
-                Like mouse events and others, listeners can be attached to
-                elements for them with <code>addEventListener()</code> 
-                directly or via your favorite JS library.  
+                Like the mouse events of yore, listeners can be attached to
+                elements using <code>addEventListener()</code> 
+                directly or by way of your favorite JS library.  
             </p><p>
-                Consider the following example using jQuery, also available as
-                a demo:
+                Consider the following example using jQuery, 
+                <a target="_new" target="_new" target="_new" href="http://decafbad.com/2009/07/drag-and-drop/api-demos.html#newschool">also available as a live demo</a>:
             </p>
             <pre lang="javascript">
     &lt;div id="newschool"&gt;
@@ -164,17 +171,141 @@
         });
     &lt;/script&gt;
             </pre>
-                    
-                <p>
+            <p>
+                Thanks to the new events and jQuery, this example is both short
+                and simple—but it packs in a lot of functionality, as the rest
+                of this article will explain.  
             </p><p>
+                Before moving on, there are at least three things about the above
+                code that are worth mentioning:
+            </p>
+            <ul>
+                <li>
+                    <p>
+                        Drop targets are enabled by virtue of having
+                        listeners for drop events.  But, 
+                        <a target="_new" href="http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#drag-and-drop-processing-model">per the HTML 5 spec</a>,
+                        draggable elements need an
+                        attribute of <code>draggable="true"</code>, set either in
+                        markup or in JavaScript.  
+                    </p>
+                    <p>
+                        Thus, <code>$('#newschool&nbsp;.dragme').attr('draggable', 'true')</code>.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        The original DOM event (as opposed to jQuery's event
+                        wrapper) offers a property called <code>dataTransfer</code>.
+                        Beyond just manipulating elements, the new drag and drop
+                        events accomodate the transmission of user-definable data
+                        during the course of the interaction.  
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Since these are first-class events, you can apply 
+                        <a target="_new" href="http://icant.co.uk/sandbox/eventdelegation/">the technique of Event Delegation</a>.
+                    </p><p>
+                        What's that?  Well, imagine you have a list of 1000
+                        list items—as part of a deeply-nested outline document,
+                        for instance.  Rather than needing to attach listeners
+                        or otherwise fiddle with all 1000 items, simply attach
+                        a listener to the parent node (eg. the
+                        <code>&lt;ul&gt;</code> element) and all events from
+                        the children will propagate up to the single parent listener.
+                        As a bonus, all new child elements added after page
+                        load will enjoy the same benefits.
+                    </p><p>
+                        <a target="_new" target="_new" target="_new" href="http://decafbad.com/2009/07/drag-and-drop/api-demos.html#delegated">Check out this demo</a>, 
+                        and 
+                        <a target="_new" target="_new" href="http://decafbad.com/2009/07/drag-and-drop/js/drag-delegated.js">the associated JS code</a> 
+                        to see more about these events and Event Delegation.
+                    </p>
+                </li>
+            </ul>
         </div>
 
         <div id="datatransfer">
             <h2>Using dataTransfer</h2>
+            <p>
+                As mentioned in the last section, the new drag and drop events
+                let you send data along with a dragged element.  But, it's even
+                better than that:  Your drop targets can receive data
+                transferred by content objects dragged into the window from 
+                other browser windows, and even <i>other applications</i>.
+            </p><p>
+                Since the example is a bit longer,  
+                <a target="_new" target="_new" href="http://decafbad.com/2009/07/drag-and-drop/api-demos.html#data_transfer">check out the live demo</a>
+                and 
+                <a target="_new" href="http://decafbad.com/2009/07/drag-and-drop/js/drag-datatransfer.js">associated code</a>
+                to get an idea of what's possible with <code>dataTransfer</code>.
+            </p><p>
+                In a nutshell, the stars of this show are the
+                <code>setData()</code> and <code>getData()</code> methods of
+                the <code>dataTransfer</code> property exposed by the Event object.
+            </p>
+            <p>
+                The <code>setData()</code> method is typically called in the 
+                <code>dragstart</code> listener, loading <code>dataTransfer</code>
+                up with one or more strings of content with associated
+                <a href="https://developer.mozilla.org/En/DragDrop/Recommended_Drag_Types#link">recommended content types</a>.
+            </p>
+            <p>
+                For illustration, here's a quick snippet from the example code:
+            </p>
+            <pre lang="javascript">
+    var dt = ev.originalEvent.dataTransfer;    
+    dt.setData('text/plain', $('#logo').parent().text());
+    dt.setData('text/html', $('#logo').parent().html());
+    dt.setData('text/uri-list', $('#logo')[0].src);
+            </pre>
+            </p><p>
+                On the other end, <code>getData()</code> allows you to query
+                for content by type (eg. <code>text/html</code> followed by
+                <code>text/plain</code>).  This, in turn, allows you to decide
+                on acceptable content types at the time of the
+                <code>drop</code> event or even during <code>dragover</code>
+                to offer feedback for unacceptable types during the drag.
+            </p><p>
+                Here's another example from the receiving end of the example code:
+            </p>
+            <pre lang="javascript">
+    var dt = ev.originalEvent.dataTransfer;    
+    $('.content_url .content').text(dt.getData('text/uri-list'));
+    $('.content_text .content').text(dt.getData('text/plain'));
+    $('.content_html .content').html(dt.getData('text/html'));
+            </pre>
+            <p>
+                Where <code>dataTransfer</code> really shines, though, is that
+                it allows your drop targets to receive content from 
+                sources outside your defined draggable elements and even from
+                outside the browser altogether.  Firefox accepts such drags, 
+                and attempts to populate <code>dataTransfer</code> with
+                appropriate content types extracted from the external object.
+            </p><p>
+                Thus, you could select some text in a word processor window and
+                drop it into one of your elements, and expect to find it as 
+                <code>text/plain</code> content—assuming your word processor
+                plays nicely, which most do.  
+            </p><p>
+                You can also select content in 
+                another browser window, and expect to see <code>text/html</code>
+                appear in your events.  Check out the 
+                <a target="_new" href="http://decafbad.com/2009/07/drag-and-drop/outline.html">outline editing demo</a>
+                and see what happens when you try dragging various elements and
+                selected content from other windows onto the items there.
+
+            </p>
         </div>
 
         <div id="dragfeedback">
             <h2>Using Drag Feedback Images</h2>
+            <p>
+                <a target="_new" href="http://decafbad.com/2009/07/drag-and-drop/api-demos.html#feedback_image">the live demo</a>
+                <a target="_new" href="http://decafbad.com/2009/07/drag-and-drop/js/drag-feedback-images.js">associated JS code</a>
+            </p><p>
+            </p>
         </div>
 
         <div id="dragfeedback">
